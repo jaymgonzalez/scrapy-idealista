@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker
-from idealista.db.models import HouseLocation, HouseDetails, engine
+from idealista.db.models import Houses, engine
 
 
 class IdealistaPipeline:
@@ -12,19 +12,17 @@ class IdealistaPipeline:
         self.session.close()
 
     def process_item(self, item, spider):
-        location = HouseLocation(house_id=item["id"], location=item["location"])
-        self.session.add(location)
-        self.session.flush()  # Ensure location.id is available
-
-        details = HouseDetails(
-            id=location.id,
-            title=item.get("title"),
-            price=item.get("price"),
-            features=item.get("features"),
-            details=item.get("details"),
-            description=item.get("description"),
-        )
-        self.session.add(details)
+        # find record by house_id
+        record = self.session.query(Houses).filter_by(house_id=item.house_id).first()
+        # find if the columns in record for price and details are empty
+        if record.price is None or record.details is None:
+            # update record
+            record.price = item.price
+            record.details = item.details
+            record.description = item.description
+            self.session.add(record)
+        else:
+            print("Couldnt find record with house_id: ", item.house_id)
         return item
 
 
@@ -38,6 +36,6 @@ class IdealistaIdPipeline:
         self.session.close()
 
     def process_item(self, item, spider):
-        id = HouseLocation(house_id=item["house_id"], location=item["location"])
+        id = Houses(house_id=item["house_id"], location=item["location"])
         self.session.add(id)
         return item

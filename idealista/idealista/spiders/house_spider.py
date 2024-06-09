@@ -27,8 +27,8 @@ class HousespiderSpider(scrapy.Spider):
 
     def parse(self, response):
         house_item = HouseItem()
-        house_item["location"] = response.css(
-            "section.detail-info span.main-info__title-minor ::text"
+        house_item["house_id"] = response.css(
+            "section.module-contact .ad-reference-container .txt-ref ::text"
         ).get()
         house_item["price"] = response.css(
             "section.detail-info .info-data-price ::text"

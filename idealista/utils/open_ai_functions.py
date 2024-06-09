@@ -46,6 +46,7 @@ class HouseAttributes(BaseModel):
     garden: int = Field(..., ge=0, le=1)
     storage_room: int = Field(..., ge=0, le=1)
     swimming_pool: int = Field(..., ge=0, le=1)
+    elevator: int = Field(..., ge=0, le=1)
 
 
 def extract_house_attributes(listing_description):
