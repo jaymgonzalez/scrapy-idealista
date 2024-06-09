@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker
-from idealista.models import HouseLocation, HouseDetails, engine
+from idealista.db.models import HouseLocation, HouseDetails, engine
 
 
 class IdealistaPipeline:

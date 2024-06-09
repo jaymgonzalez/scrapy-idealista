@@ -31,7 +31,6 @@ Take a deep breath, think about what you are about to do, and start working on i
 
 
 class HouseAttributes(BaseModel):
-    price: int
     house_size: str
     condition: str
     type: str
@@ -45,6 +44,7 @@ class HouseAttributes(BaseModel):
     garage: int = Field(..., ge=0, le=1)
     heating: int = Field(..., ge=0, le=1)
     garden: int = Field(..., ge=0, le=1)
+    storage_room: int = Field(..., ge=0, le=1)
     swimming_pool: int = Field(..., ge=0, le=1)
 
 
