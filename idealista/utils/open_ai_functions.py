@@ -33,12 +33,12 @@ Take a deep breath, think about what you are about to do, and start working on i
 class HouseAttributes(BaseModel):
     house_size: str
     condition: str
-    type: str
+    house_type: str
     rooms: int
     floors: int
     bathrooms: int
     lot_size: int
-    builr_year: int
+    built_year: int
     air_conditioning: int = Field(..., ge=0, le=1)
     terrace: int = Field(..., ge=0, le=1)
     garage: int = Field(..., ge=0, le=1)

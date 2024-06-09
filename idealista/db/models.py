@@ -10,31 +10,32 @@ class HouseLocation(Base):
     house_id = Column(String)
     location = Column(String)
 
-    details = relationship("HouseDetails", back_populates="location", uselist=False)
+    house_details = relationship("HouseDetails", back_populates="house_location", uselist=False)
 
 
 class HouseDetails(Base):
     __tablename__ = "house_details"
     id = Column(Integer, ForeignKey("house_location.id"), primary_key=True)
-    url = Column(String)
     price = Column(String)
-    features = Column(String)
-    details_description = Column(String)
-    title = Column(String)
-    rooms = Column(String)
-    baths = Column(String)
-    size = Column(String)
-    house_type = Column(String)
+    details = Column(String)
     description = Column(String)
-    terrace = Column(String)
-    land = Column(String)
-    floors = Column(String)
-    garage = Column(String)
+    house_size = Column(String)
     condition = Column(String)
-    swimming_pool = Column(String)
-    garden = Column(String)
+    house_type = Column(String)
+    rooms = Column(Integer)
+    floors = Column(Integer)
+    bathrooms = Column(Integer)
+    lot_size = Column(Integer)
+    built_year = Column(Integer)
+    air_conditioning = Column(Integer)
+    terrace = Column(Integer)
+    garage = Column(Integer)
+    heating = Column(Integer)
+    garden = Column(Integer)
+    storage_room = Column(Integer)
+    swimming_pool = Column(Integer)
 
-    location = relationship("HouseLocation", back_populates="details")
+    house_location = relationship("HouseLocation", back_populates="house_details")
 
 
 engine = create_engine("sqlite:///scrapy_data.db")
