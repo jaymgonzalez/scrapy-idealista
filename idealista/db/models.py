@@ -38,6 +38,6 @@ class HouseDetails(Base):
     house_location = relationship("HouseLocation", back_populates="house_details")
 
 
-engine = create_engine("sqlite:///scrapy_data.db")
+engine = create_engine("sqlite:///idealista/data/scrapy_data.db")
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
