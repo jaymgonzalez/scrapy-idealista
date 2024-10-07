@@ -1,16 +1,17 @@
 from langchain.output_parsers import PydanticOutputParser
 from langchain_core.prompts.chat import ChatPromptTemplate
-from langchain_openai.chat_models.base import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 import dotenv
 import json
 import os
+import re
 
 dotenv.load_dotenv()
 
 # Set up the OpenAI API key
 api_key = os.getenv("OPENAI_API_KEY")
-model = "gpt-3.5-turbo"
+model = "gpt-4o-mini-2024-07-18"
 
 # Define the prompt template
 
@@ -70,5 +71,10 @@ def extract_item_attributes(listing_description, pydantic_object):
     )
     chat = ChatOpenAI(temperature=0.3, model=model, api_key=api_key)
     response = chat(messages)
+    try:
+        cleaned_response = re.sub(r"```|json", "", response.content).strip()
+        response = json.loads(cleaned_response)
+    except json.JSONDecodeError:
+        raise ValueError(f"Error decoding the response: {response.content}")
 
-    return json.loads(response.content)
+    return response

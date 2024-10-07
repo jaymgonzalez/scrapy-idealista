@@ -50,14 +50,13 @@ class Garages(Base):
     concesion = Column(Boolean)
     pictures = Column(String)
     address = Column(String)
+    hood = Column(String)
     last_updated = Column(String)
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(current_dir, "..", "data", "scrapy_data.db")
 db_path = os.path.normpath(db_path)
-
-print(f"Creating database at: {db_path}")
 
 engine = create_engine(f"sqlite:///{db_path}")
 Base.metadata.create_all(engine)

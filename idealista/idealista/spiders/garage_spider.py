@@ -34,7 +34,7 @@ class GarageSpider(scrapy.Spider):
         #     for garage_id in garage_ids
         # ]
 
-        start_urls = ["http://www.idealista.com/inmueble/104633874/"]
+        start_urls = ["http://www.idealista.com/inmueble/39815589/"]
 
         for url in start_urls:
             yield scrapy.Request(get_scraperapi_url(url), self.parse)

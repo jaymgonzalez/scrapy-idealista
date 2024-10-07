@@ -24,7 +24,7 @@ class IdealistaPipeline:
             record.description = item.description
             self.session.add(record)
         else:
-            print("Couldnt find record with house_id: ", item.house_id)
+            spider.logger.error("Couldnt find record with house_id: ", item.house_id)
         return item
 
 
@@ -72,7 +72,6 @@ class IdealistaGaragePipeline:
         record = (
             self.session.query(Garages).filter_by(garage_id=item["garage_id"]).first()
         )
-        # find if the columns in record for price and details are empty
         if record is None:
             spider.logger.error(
                 f"Record with garage_id {item['garage_id']} not found in database."
@@ -80,7 +79,7 @@ class IdealistaGaragePipeline:
             return
         else:
             spider.logger.info(
-                f"Record found: garage_id={record.garage_id}, price={record.price}, details={record.details}"
+                f"Record found: garage_id={record.garage_id}, price={record.price}, details={record.details} description={record.description}"
             )
 
             # update record
@@ -113,15 +112,17 @@ class OpenAIPipeline:
             logging.error(f"Couldn't find record with garage_id: {item['garage_id']}")
             return
 
-        fields = [record.price, record.details, record.description]
+        fields = [
+            record.price_string,
+            record.details,
+            record.description,
+            record.address,
+        ]
         data = "".join(field or "" for field in fields)
 
         response = extract_item_attributes(data, GarageAttributes)
 
-        print(response)
-
         response = GarageAttributes.model_validate(response)
-        # Update the existing record
 
         record.price = response.price
         record.size_in_m2 = response.size_in_m2
@@ -132,5 +133,4 @@ class OpenAIPipeline:
         record.concesion = response.concesion
         record.hood = response.hood
 
-        # Commit the changes
         self.session.commit()
