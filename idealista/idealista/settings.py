@@ -1,3 +1,15 @@
+import sys
+import os
+
+# Get the absolute path of the current file (settings.py)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Get the parent directory (root 'idealista' directory)
+parent_dir = os.path.dirname(current_dir)
+
+# Add the parent directory to sys.path
+sys.path.insert(0, parent_dir)
+
 # Scrapy settings for idealista project
 #
 # For simplicity, this file contains only settings considered important or
@@ -64,7 +76,8 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     #    "idealista.pipelines.IdealistaPipeline": 300,
-    "idealista.pipelines.IdealistaIdPipeline": 300,
+    "idealista.pipelines.IdealistaGaragePipeline": 300,
+    "idealista.pipelines.OpenAIPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
