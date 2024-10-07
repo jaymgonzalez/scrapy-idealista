@@ -88,6 +88,7 @@ class IdealistaGaragePipeline:
             record.description = item["description"]
             record.address = item["address"]
             record.title = item["title"]
+            record.hood = item["hood"]
 
             self.session.add(record)
 
@@ -112,12 +113,7 @@ class OpenAIPipeline:
             logging.error(f"Couldn't find record with garage_id: {item['garage_id']}")
             return
 
-        fields = [
-            record.price_string,
-            record.details,
-            record.description,
-            record.address,
-        ]
+        fields = [record.price_string, record.details, record.description]
         data = "".join(field or "" for field in fields)
 
         response = extract_item_attributes(data, GarageAttributes)
@@ -131,6 +127,5 @@ class OpenAIPipeline:
         record.security = response.security
         record.expenses = response.expenses
         record.concesion = response.concesion
-        record.hood = response.hood
 
         self.session.commit()

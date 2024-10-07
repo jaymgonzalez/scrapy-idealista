@@ -11,7 +11,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # Query the database for the garage_id 'PGRB4'
-garage_id = "103111781"
+garage_id = "95199792"
 record = session.query(Garages).filter_by(garage_id=garage_id).first()
 
 if record:
@@ -36,7 +36,6 @@ if record:
     record.security = response.security
     record.expenses = response.expenses
     record.concesion = response.concesion
-    record.hood = response.hood
 
     # Commit the changes
     session.commit()

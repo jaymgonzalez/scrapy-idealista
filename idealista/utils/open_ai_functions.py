@@ -52,7 +52,6 @@ class HouseAttributes(BaseModel):
 
 
 class GarageAttributes(BaseModel):
-    hood: str = Field(description="The neighborhood where is located")
     price: int
     size_in_m2: int
     covered: bool = Field(description="Is the garage covered?")

@@ -77,7 +77,7 @@ ROBOTSTXT_OBEY = False
 ITEM_PIPELINES = {
     #    "idealista.pipelines.IdealistaPipeline": 300,
     "idealista.pipelines.IdealistaGaragePipeline": 300,
-    "idealista.pipelines.OpenAIPipeline": 400,
+    # "idealista.pipelines.OpenAIPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

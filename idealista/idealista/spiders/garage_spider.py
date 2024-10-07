@@ -34,7 +34,7 @@ class GarageSpider(scrapy.Spider):
         #     for garage_id in garage_ids
         # ]
 
-        start_urls = ["http://www.idealista.com/inmueble/39815589/"]
+        start_urls = ["http://www.idealista.com/inmueble/95199792/"]
 
         for url in start_urls:
             yield scrapy.Request(get_scraperapi_url(url), self.parse)
@@ -50,11 +50,15 @@ class GarageSpider(scrapy.Spider):
         raw_description = response.css(".comment ::text").getall()
         raw_address = response.css("#mapWrapper ::text").getall()
         raw_title = response.css(".main-info__title ::text").getall()
+        raw_hood = response.css(
+            ".main-info__title .main-info__title-minor ::text"
+        ).get()
 
         garage_item["price_string"] = self.clean_and_join(raw_price)
         garage_item["details"] = self.clean_and_join(raw_details)
         garage_item["description"] = self.clean_and_join(raw_description)
         garage_item["address"] = self.clean_and_join(raw_address)
         garage_item["title"] = self.clean_and_join(raw_title)
+        garage_item["hood"] = raw_hood.split(",")[0]
 
         yield garage_item

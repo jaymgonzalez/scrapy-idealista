@@ -21,3 +21,4 @@ class GarageItem(Item):
     details = Field()
     description = Field()
     address = Field()
+    hood = Field()
