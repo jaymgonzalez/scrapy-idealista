@@ -4,6 +4,8 @@ from idealista.items import GarageItem
 import os
 import dotenv
 
+from db.functions import get_garage_ids
+
 dotenv.load_dotenv()
 API_KEY = os.getenv("SCRAPERAPI_API_KEY")
 
@@ -15,10 +17,7 @@ def get_scraperapi_url(url):
 
 
 class GarageSpider(scrapy.Spider):
-    name = "garage_spider"
-    start_urls = [
-        "https://www.idealista.com/venta-garajes/madrid/barrio-de-salamanca/fuente-del-berro/pagina-1.htm"
-    ]
+    name = "garage_page_spider"
 
     def clean_and_join(self, text_list):
         cleaned_list = [
@@ -28,24 +27,20 @@ class GarageSpider(scrapy.Spider):
         return " ".join(cleaned_list)
 
     def start_requests(self):
-        for url in self.start_urls:
+
+        garage_ids = get_garage_ids()
+        start_urls = [
+            f"http://www.idealista.com/inmueble/{garage_id[0]}/"
+            for garage_id in garage_ids
+        ]
+
+        for url in start_urls:
             yield scrapy.Request(get_scraperapi_url(url), self.parse)
 
     def parse(self, response):
-        garage_ids = response.css("article.item ::attr(data-element-id)").getall()
-        for garage in garage_ids:
-            url = f"http://www.idealista.com/inmueble/{garage}/"
-            yield scrapy.Request(get_scraperapi_url(url), self.parse_garage)
-
-        next_page = response.css("div.pagination li.next ::attr(href)").get()
-
-        if next_page is not None:
-            next_page_url = "http://idealista.com/" + next_page
-            yield scrapy.Request(get_scraperapi_url(next_page_url), self.parse)
-
-    def parse_garage(self, response):
         garage_item = GarageItem()
 
+        garage_item["garage_id"] = response.url.split("%2F")[-2]
         raw_price = response.css(
             "section.price-features__container p.flex-feature ::text"
         ).getall()
@@ -57,7 +52,6 @@ class GarageSpider(scrapy.Spider):
             ".main-info__title .main-info__title-minor ::text"
         ).get()
 
-        garage_item["garage_id"] = response.url.split("%2F")[-2]
         garage_item["price_string"] = self.clean_and_join(raw_price)
         garage_item["details"] = self.clean_and_join(raw_details)
         garage_item["description"] = self.clean_and_join(raw_description)
