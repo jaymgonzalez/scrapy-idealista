@@ -52,11 +52,12 @@ class HouseAttributes(BaseModel):
 
 
 class GarageAttributes(BaseModel):
-    price: int
     size_in_m2: int
     covered: bool = Field(description="Is the garage covered?")
     security: bool = Field(description="Is there human security ?")
-    type: str = Field(description="big car, motorcycle, small car, etc")
+    type: str = Field(
+        description="What type of vehicle fits: big car, motorcycle, small car, etc"
+    )
     concesion: bool = Field(description="Is it a concession from the city?")
     expenses: int = Field(description="Monthly expenses, IBI, etc")
 

@@ -16,6 +16,7 @@ class HouseItem(Item):
 
 class GarageItem(Item):
     garage_id = Field()
+    price = Field()
     price_string = Field()
     title = Field()
     details = Field()

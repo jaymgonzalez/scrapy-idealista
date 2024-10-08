@@ -71,6 +71,9 @@ class GarageSpider(scrapy.Spider):
         ).get()
 
         garage_item["garage_id"] = response.url.split("%2F")[-2]
+        garage_item["price"] = int(
+            response.css(".info-data-price .txt-bold ::text").get()
+        )
         garage_item["price_string"] = self.clean_and_join(raw_price)
         garage_item["details"] = self.clean_and_join(raw_details)
         garage_item["description"] = self.clean_and_join(raw_description)

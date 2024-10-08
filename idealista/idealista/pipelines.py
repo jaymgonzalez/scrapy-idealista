@@ -58,6 +58,7 @@ class IdealistaGaragePipeline:
         if record is None:
             record = Garages(
                 garage_id=item["garage_id"],
+                price=item["price"],
                 price_string=item["price_string"],
                 details=item["details"],
                 description=item["description"],
@@ -71,6 +72,7 @@ class IdealistaGaragePipeline:
         else:
             # If the record exists, you can update fields if needed
             record.garage_id = item["garage_id"]
+            record.price = item["price"]
             record.price_string = item["price_string"]
             record.details = item["details"]
             record.description = item["description"]
@@ -108,7 +110,6 @@ class OpenAIPipeline:
 
         response = GarageAttributes.model_validate(response)
 
-        record.price = response.price
         record.size_in_m2 = response.size_in_m2
         record.type = response.type
         record.covered = response.covered
