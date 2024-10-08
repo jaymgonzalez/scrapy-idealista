@@ -2,3 +2,4 @@
 venv
 */data/scrapy_data.db
 __pycache__/
+.vscode/
