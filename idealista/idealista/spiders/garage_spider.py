@@ -17,7 +17,7 @@ def get_scraperapi_url(url):
 class GarageSpider(scrapy.Spider):
     name = "garage_spider"
     start_urls = [
-        "https://www.idealista.com/venta-garajes/madrid/barrio-de-salamanca/fuente-del-berro/pagina-1.htm"
+        "https://www.idealista.com/alquiler-garajes/madrid/barrio-de-salamanca/fuente-del-berro/pagina-1.htm"
     ]
 
     def clean_and_join(self, text_list):
@@ -64,5 +64,12 @@ class GarageSpider(scrapy.Spider):
         garage_item["address"] = self.clean_and_join(raw_address)
         garage_item["title"] = self.clean_and_join(raw_title)
         garage_item["hood"] = raw_hood.split(",")[0]
+
+        if garage_item["title"].lower().startswith("alquiler"):
+            garage_item["sell"] = 0
+            garage_item["rent"] = 1
+        else:
+            garage_item["sell"] = 1
+            garage_item["rent"] = 0
 
         yield garage_item

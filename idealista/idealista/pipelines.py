@@ -42,43 +42,6 @@ class IdealistaIdHousesPipeline:
         return item
 
 
-# class IdealistaIdGaragePipeline:
-#     def open_spider(self, spider):
-#         self.Session = sessionmaker(bind=engine)
-#         self.session = self.Session()
-
-#     def close_spider(self, spider):
-#         self.session.commit()
-#         self.session.close()
-
-#     def process_item(self, item, spider):
-#         id = Garages(garage_id=item["garage_id"])
-#         self.session.add(id)
-#         return item
-
-
-# class IdealistaGetDetailsGaragePipeline:
-#     def open_spider(self, spider):
-#         self.Session = sessionmaker(bind=engine)
-#         self.session = self.Session()
-
-#     def close_spider(self, spider):
-#         self.session.commit()
-#         self.session.close()
-
-#     def clean_and_join(self, text_list):
-#         cleaned_list = [
-#             text.strip() for text in text_list if text.strip() and text.strip() != "\n"
-#         ]
-#         # Join into a single string
-#         return " ".join(cleaned_list)
-
-#     def process_item(self, item, spider):
-#         url = f"http://www.idealista.com/inmueble/{item['garage_id']}/"
-
-#         yield scrapy.Request(get_scraperapi_url(url), self.parse_garage)
-
-
 class IdealistaGaragePipeline:
     def open_spider(self, spider):
         self.Session = sessionmaker(bind=engine)
@@ -101,6 +64,8 @@ class IdealistaGaragePipeline:
                 address=item["address"],
                 title=item["title"],
                 hood=item["hood"],
+                sell=item["sell"],
+                rent=item["rent"],
             )
             self.session.add(record)
         else:
@@ -112,6 +77,8 @@ class IdealistaGaragePipeline:
             record.address = item["address"]
             record.title = item["title"]
             record.hood = item["hood"]
+            record.sell = item["sell"]
+            record.rent = item["rent"]
 
             self.session.add(record)
 

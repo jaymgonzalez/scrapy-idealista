@@ -22,3 +22,5 @@ class GarageItem(Item):
     description = Field()
     address = Field()
     hood = Field()
+    sell = Field()
+    rent = Field()

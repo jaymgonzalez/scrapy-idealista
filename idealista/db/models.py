@@ -52,6 +52,8 @@ class Garages(Base):
     address = Column(String)
     hood = Column(String)
     last_updated = Column(String)
+    sell = Column(Integer)
+    rent = Column(Integer)
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
