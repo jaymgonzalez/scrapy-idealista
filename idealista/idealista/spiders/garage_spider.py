@@ -1,8 +1,10 @@
-from urllib.parse import urlencode
-import scrapy
+from sqlalchemy.orm import sessionmaker
 from idealista.items import GarageItem
-import os
+from db.models import engine, Garages
+from urllib.parse import urlencode
 import dotenv
+import scrapy
+import os
 
 dotenv.load_dotenv()
 API_KEY = os.getenv("SCRAPERAPI_API_KEY")
@@ -16,9 +18,14 @@ def get_scraperapi_url(url):
 
 class GarageSpider(scrapy.Spider):
     name = "garage_spider"
-    start_urls = [
-        "https://www.idealista.com/alquiler-garajes/madrid/barrio-de-salamanca/fuente-del-berro/pagina-1.htm"
-    ]
+
+    def __init__(self, *args, **kwargs):
+        super(GarageSpider, self).__init__(*args, **kwargs)
+        # Set up the database session
+        self.Session = sessionmaker(bind=engine)
+        self.session = self.Session()
+
+    start_urls = ["https://www.idealista.com/alquiler-garajes/madrid/usera/"]
 
     def clean_and_join(self, text_list):
         cleaned_list = [
@@ -27,15 +34,21 @@ class GarageSpider(scrapy.Spider):
         # Join into a single string
         return " ".join(cleaned_list)
 
+    def garage_id_exists(self, garage_id):
+        # Check if the garage ID exists in the database
+        record = self.session.query(Garages).filter_by(garage_id=garage_id).first()
+        return record is not None
+
     def start_requests(self):
         for url in self.start_urls:
             yield scrapy.Request(get_scraperapi_url(url), self.parse)
 
     def parse(self, response):
         garage_ids = response.css("article.item ::attr(data-element-id)").getall()
-        for garage in garage_ids:
-            url = f"http://www.idealista.com/inmueble/{garage}/"
-            yield scrapy.Request(get_scraperapi_url(url), self.parse_garage)
+        for garage_id in garage_ids:
+            if not self.garage_id_exists(garage_id):
+                url = f"http://www.idealista.com/inmueble/{garage_id}/"
+                yield scrapy.Request(get_scraperapi_url(url), self.parse_garage)
 
         next_page = response.css("div.pagination li.next ::attr(href)").get()
 
