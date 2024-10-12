@@ -25,7 +25,7 @@ class GarageSpider(scrapy.Spider):
         self.Session = sessionmaker(bind=engine)
         self.session = self.Session()
 
-    start_urls = ["https://www.idealista.com/alquiler-garajes/madrid/usera/"]
+    start_urls = ["https://www.idealista.com/venta-garajes/madrid/usera/"]
 
     def clean_and_join(self, text_list):
         cleaned_list = [
@@ -72,7 +72,7 @@ class GarageSpider(scrapy.Spider):
 
         garage_item["garage_id"] = response.url.split("%2F")[-2]
         garage_item["price"] = int(
-            response.css(".info-data-price .txt-bold ::text").get()
+            response.css(".info-data-price .txt-bold ::text").get().replace(".", "")
         )
         garage_item["price_string"] = self.clean_and_join(raw_price)
         garage_item["details"] = self.clean_and_join(raw_details)
