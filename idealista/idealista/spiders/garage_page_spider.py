@@ -4,7 +4,7 @@ from idealista.items import GarageItem
 import os
 import dotenv
 
-from db.functions import get_garage_ids
+from db.functions import get_garage_ids_without_price_string as get_garage_ids
 
 dotenv.load_dotenv()
 API_KEY = os.getenv("SCRAPERAPI_API_KEY")

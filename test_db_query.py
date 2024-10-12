@@ -46,9 +46,9 @@ session = Session()
 # session.close()
 
 
-from idealista.db.functions import get_garage_ids
+from idealista.db.functions import get_garage_ids_without_price_string
 
-garage_ids = get_garage_ids()
+garage_ids = get_garage_ids_without_price_string()
 
 start_urls = [
     f"http://www.idealista.com/inmueble/{garage_id[0]}/" for garage_id in garage_ids

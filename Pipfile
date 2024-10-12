@@ -4,13 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
 python-dotenv = "*"
 pydantic = "*"
 sqlalchemy = "*"
-langchain = "*"
 scrapy = "*"
-langchain_openai = "*"
+openai = "*"
+instructor = "*"
+jinja2 = "*"
 
 [dev-packages]
 

@@ -33,10 +33,21 @@ def get_house_ids():
     return house_ids
 
 
-def get_garage_ids():
+def get_garage_ids_without_price_string():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute("SELECT garage_id FROM garages WHERE price_string IS NULL")
+    garage_ids = cursor.fetchall()
+    conn.close()
+    return garage_ids
+
+
+def get_garage_ids_without_size():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT garage_id FROM garages WHERE price_string IS NOT NULL AND size_in_m2 IS NULL"
+    )
     garage_ids = cursor.fetchall()
     conn.close()
     return garage_ids
